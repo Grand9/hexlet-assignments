@@ -1,14 +1,14 @@
-package exercise.dto.users;
+    package exercise.dto.users;
 
-import exercise.model.User;
+    import exercise.model.User;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+    import lombok.AllArgsConstructor;
+    import lombok.Getter;
 
-// BEGIN
-@AllArgsConstructor
-@Getter
-public class UserPage {
-    private User user;
-}
-// END
+    // BEGIN
+    @AllArgsConstructor
+    @Getter
+    public class UserPage {
+        private User user;
+    }
+    // END

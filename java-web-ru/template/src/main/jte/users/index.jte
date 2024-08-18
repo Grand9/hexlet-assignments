@@ -9,36 +9,25 @@
           rel="stylesheet"
           integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
           crossorigin="anonymous">
-    <title>${page.getHeader()}</title>
+    <title>Hello Hexlet!</title>
 </head>
 <body>
-<div class="container mt-4">
-    <h1>${page.getHeader()}</h1>
-    @if(page.getUsers().isEmpty())
-        <p>Нет пользователей</p>
-    @else
+<div class="mx-auto p-4 py-md-5">
+    <main>
+        <h1>Пользователи</h1>
         <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Имя</th>
-                <th>Email</th>
-                <th>Действие</th>
-            </tr>
-            </thead>
-            <tbody>
-            @for(user in page.getUsers())
+            @for(var user : page.getUsers())
                 <tr>
-                    <td>${user.getId()}</td>
-                    <td><a href="/users/${user.getId()}">${user.getFirstName()} ${user.getLastName()}</a></td>
-                    <td>${user.getEmail()}</td>
-                    <td><a href="/users/${user.getId()}" class="btn btn-primary">Просмотр</a></td>
+                    <td>
+                        ${user.getId()}
+                    </td>
+                    <td>
+                        <a href="/users/${user.getId()}">${user.getFirstName()} ${user.getLastName()}</a>
+                    </td>
                 </tr>
             @endfor
-            </tbody>
         </table>
-    @endif
-    <a href="/" class="btn btn-secondary">На главную</a>
+    </main>
 </div>
 </body>
 </html>

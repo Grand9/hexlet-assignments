@@ -9,13 +9,14 @@
           rel="stylesheet"
           integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
           crossorigin="anonymous">
-    <title>Пользователь</title>
+    <title>Hello Hexlet!</title>
 </head>
 <body>
-<div class="container mt-4">
-    <h1>${page.getUser().getFirstName()} ${page.getUser().getLastName()}</h1>
-    <p>Email: ${page.getUser().getEmail()}</p>
-    <a href="/users" class="btn btn-secondary">Назад к списку пользователей</a>
+<div class="mx-auto p-4 py-md-5">
+    <main>
+        <h2>${page.getUser().getFirstName()} ${page.getUser().getLastName()}</h2>
+        <div>${page.getUser().getEmail()}</div>
+    </main>
 </div>
 </body>
 </html>

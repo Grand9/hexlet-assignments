@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class ProductUpdateDTO {
     private String title;
-    private Double price;
+    private int price;
 }
 // END

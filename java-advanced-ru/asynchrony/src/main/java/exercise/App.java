@@ -17,15 +17,17 @@ class App {
             Path destPath = Paths.get(destFilePath);
 
             try {
-                if (!Files.exists(path1) || !Files.exists(path2)) {
-                    throw new java.nio.file.NoSuchFileException("One or both source files do not exist.");
+                if (!Files.exists(path1)) {
+                    throw new java.nio.file.NoSuchFileException(filePath1);
+                }
+                if (!Files.exists(path2)) {
+                    throw new java.nio.file.NoSuchFileException(filePath2);
                 }
 
                 String content1 = Files.readString(path1);
                 String content2 = Files.readString(path2);
                 String combinedContent = content1 + System.lineSeparator() + content2;
-                Files.writeString(destPath, combinedContent, StandardOpenOption.CREATE,
-                        StandardOpenOption.TRUNCATE_EXISTING);
+                Files.writeString(destPath, combinedContent, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
                 return "File successfully created at: " + destPath.toString();
             } catch (IOException e) {

@@ -20,25 +20,19 @@ public class UserService {
     }
 
     // BEGIN
-    public Mono<User> createUser(User user) {
-        return userRepository.save(user);
-    }
-
-    public Mono<User> getUser(Long id) {
+    public Mono<User> show(Long id) {
         return userRepository.findById(id);
     }
-
-    public Mono<Void> deleteUser(Long id) {
-        return userRepository.deleteById(id);
+    public Mono<User> create(User userData) {
+        return userRepository.save(userData);
     }
-
-    public Mono<User> updateUser(Long id, User updatedUser) {
-        return userRepository.findById(id)
-                .flatMap(existingUser -> {
-                    existingUser.setFirstName(updatedUser.getFirstName());
-                    existingUser.setEmail(updatedUser.getEmail());
-                    return userRepository.save(existingUser);
-                });
+    public Mono<User> update(User userData, Long id) {
+        User res = new User(userData.getFirstName(), userData.getLastName(), userData.getEmail());
+        res.setId(id);
+        return userRepository.save(res);
+    }
+    public Mono<Void> delete(Long id) {
+        return userRepository.deleteById(id);
     }
     // END
 }

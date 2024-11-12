@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 // BEGIN
 @Repository
-public interface UserRepository extends ReactiveCrudRepository<User, Long>{
+public interface UserRepository extends ReactiveCrudRepository<User, Long> {
 }
 // END

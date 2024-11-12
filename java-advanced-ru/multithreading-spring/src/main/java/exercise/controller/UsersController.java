@@ -30,24 +30,21 @@ public class UsersController {
     }
 
     // BEGIN
-    @PostMapping("")
+    @GetMapping(path = "/{id}")
+    public Mono<User> showUser(@PathVariable Long id) {
+        return userService.show(id);
+    }
+    @PostMapping(path = "")
     public Mono<User> createUser(@RequestBody User user) {
-        return userService.createUser(user);
+        return userService.create(user);
     }
-
-    @GetMapping("/{id}")
-    public Mono<User> getUser(@PathVariable Long id) {
-        return userService.getUser(id);
+    @PatchMapping(path = "/{id}")
+    public Mono<User> updateUser(@RequestBody User userData, @PathVariable Long id) {
+        return userService.update(userData, id);
     }
-
-    @PatchMapping("/{id}")
-    public Mono<User> updateUser(@PathVariable Long id,@RequestBody User user) {
-        return userService.updateUser(id, user);
-    }
-
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = "/{id}")
     public Mono<Void> deleteUser(@PathVariable Long id) {
-        return userService.deleteUser(id);
+        return userService.delete(id);
     }
     // END
 }

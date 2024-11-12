@@ -18,7 +18,7 @@ class App {
 
             try {
                 if (!Files.exists(path1) || !Files.exists(path2)) {
-                    throw new IOException("One or both source files do not exist.");
+                    throw new java.nio.file.NoSuchFileException("One or both source files do not exist.");
                 }
 
                 String content1 = Files.readString(path1);

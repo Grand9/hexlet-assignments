@@ -1,39 +1,66 @@
 package exercise;
 
-import java.util.concurrent.CompletableFuture;
-import java.nio.file.Paths;
-import java.nio.file.Path;
-import java.nio.file.Files;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 class App {
 
-    public static CompletableFuture<String> unionFiles(String filePath1, String filePath2, String destFilePath) {
-        return CompletableFuture.supplyAsync(() -> {
-            Path path1 = Paths.get(filePath1);
-            Path path2 = Paths.get(filePath2);
-            Path destPath = Paths.get(destFilePath);
+    // BEGIN
+    public static CompletableFuture<String> unionFiles(String file1, String file2, String file_result) {
 
+        CompletableFuture<String> string1 = CompletableFuture.supplyAsync(() -> {
             try {
-                if (!Files.exists(path1)) {
-                    throw new java.nio.file.NoSuchFileException(filePath1);
-                }
-                if (!Files.exists(path2)) {
-                    throw new java.nio.file.NoSuchFileException(filePath2);
-                }
-
-                String content1 = Files.readString(path1);
-                String content2 = Files.readString(path2);
-                String combinedContent = content1 + System.lineSeparator() + content2;
-                Files.writeString(destPath, combinedContent, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-
-                return "File successfully created at: " + destPath.toString();
-            } catch (IOException e) {
-                System.out.println("An error occurred: " + e.getMessage());
-                return "Failed to create the file.";
+                System.out.println("First file read");
+                TimeUnit.SECONDS.sleep(5);
+                return Files.readString(Paths.get(file1).toAbsolutePath().normalize());
+            } catch (IOException | InterruptedException e) {
+                System.out.println("First file not found");
+                throw new RuntimeException(e);
             }
+        });
+
+        CompletableFuture<String> string2 = CompletableFuture.supplyAsync(() -> {
+            try {
+                System.out.println("Second file read");
+                TimeUnit.SECONDS.sleep(5);
+                return Files.readString(Paths.get(file2).toAbsolutePath().normalize());
+            } catch (IOException | InterruptedException e) {
+                System.out.println("Second file not found");
+                throw new RuntimeException(e);
+            }
+        });
+
+        return string1.thenCombine(string2, (f1, f2) -> {
+            try {
+                Path path = Paths.get(file_result);
+                if (Files.notExists(path.toAbsolutePath().normalize())) {
+                    System.out.println("Result file create");
+                    Files.createFile(path.toAbsolutePath().normalize());
+                }
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file_result));
+                writer.write(f1);
+                writer.write(f2);
+                writer.close();
+                System.out.println("Writing to result file completed");
+                TimeUnit.SECONDS.sleep(5);
+            } catch (IOException | InterruptedException e) {
+                System.out.println("Result file not found");
+                throw new RuntimeException(e);
+            }
+            String result = f1 + f2;
+            System.out.println("Sum of files=" + result);
+            return result;
+
+        }).exceptionally(ex -> {
+            System.out.println("Oops! We have an exception - " + ex.getMessage());
+            return null;
         });
     }
 
@@ -58,13 +85,15 @@ class App {
             }
         });
     }
+    // END
 
     public static void main(String[] args) throws Exception {
+        // BEGIN
         CompletableFuture<String> result = App.unionFiles("src/main/resources/file1.txt",
-                "src/main/resources/file2.txt", "src/main/resources/result.txt");
-        System.out.println(result.get());
-
-        CompletableFuture<Long> size = App.getDirectorySize("src/main/resources");
-        System.out.println("Directory size: " + size.get() + " bytes");
+                "src/main/resources/file2.txt",
+                "src/main/resources/file3.txt");
+        System.out.println("Result= " + result.toString());
+        // END
     }
 }
+
